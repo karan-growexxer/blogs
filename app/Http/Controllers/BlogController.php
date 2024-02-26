@@ -2,39 +2,48 @@
 
 namespace App\Http\Controllers;
 
+use App\Blog;
+use App\Http\Requests\StoreBlogRequest;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class BlogController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Used this for show listing page, and also handle Ajax request.
      *
-     * @return \Illuminate\Http\Response
+     * @param  mixed $request
+     * @return void
      */
-    public function index()
+    public function index(Request $request) 
     {
-        //
+        $blogs = Blog::all();
+        return view('blogs.index', compact('blogs'));
     }
 
     /**
-     * Show the form for creating a new resource.
+     * store
      *
-     * @return \Illuminate\Http\Response
+     * @param  mixed $request
+     * @return void
      */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
+    public function store(StoreBlogRequest $request) {
+        try{
+            $input = $request->all();
+            if(!empty($request->id)) {
+                $task = Blog::find($request->id);
+                $task->update($input);
+                return ['success' => true, 'message' => 'Task updated successfully'];
+            } else {
+                Blog::create($input);
+                return  ['success' => true, 'message' => 'Task created successfully'];
+            }
+        } catch(Exception $e) {
+            Log::error($e);
+            $response = ['success' => false, 'message' => 'Something went wrong'];
+        }
+        return response()->json($response);
     }
 
     /**
