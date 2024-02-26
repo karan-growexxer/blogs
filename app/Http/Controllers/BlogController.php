@@ -18,8 +18,15 @@ class BlogController extends Controller
      */
     public function index(Request $request) 
     {
-        $blogs = Blog::all();
-        return view('blogs.index', compact('blogs'));
+        if($request->ajax()) {
+            $blogsBuilder = new Blog();
+            if($request->has('search')) {
+                $blogsBuilder->where('title','LIKE', "%$request->search%");
+            }
+            $blogsCollection = $blogsBuilder->get();
+            return response()->json(['html'=> view('blogs.list', compact('blogsCollection'))->render()]);
+        }
+        return view('blogs.index');
     }
 
     /**
