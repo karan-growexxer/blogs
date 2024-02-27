@@ -1,18 +1,14 @@
-<html>
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="csrf-token" content="{{ csrf_token() }}" />
-    <title>My Blogs</title>
-    <!-- Font Awesome -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet" />
-    <!-- MDB -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.2/mdb.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css"/>
-</head>
-<body>
+@extends('layouts.app')
+@push('style')
+     <!-- Font Awesome -->
+     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+     <!-- Google Fonts -->
+     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet" />
+     <!-- MDB -->
+     {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.2/mdb.min.css" rel="stylesheet" /> --}}
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css"/>
+@endpush
+@section('content')
     <section class="vh-100">
         <div class="container py-5 h-100">
             <div class="row d-flex justify-content-center align-items-center">
@@ -62,54 +58,11 @@
             </div>
         </div>
     </section>
-</body>
-</html>
+@endsection
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-<script>
-    $(document).ready(function() {
-        loadBlogsList();
-        $('#search').on('keyup', loadBlogsList);
-
-        $('#createBlogForm').submit(function(event) {
-            event.preventDefault();
-            $.ajax({
-                type: 'POST',
-                url: '/blogs',
-                data: $(this).serialize(),
-                success: function(response) {
-                    if(response.success){
-                        toastr.success(response.message);
-                        $('#createBlogForm')[0].reset();
-                        loadBlogsList();
-                    }
-                },
-                error: function(er){
-                    let res = JSON.parse(er.responseText);
-                    $.each(res.errors, function (key, val) {
-                        toastr.error(val[0]);
-                    });
-                }
-            });
-        });
-    });
-
-    $(document).on('click', '.edit-btn', function(){
-        $('#blog_id').val($(this).data('blog_id'));
-        $('#title').val($(this).data('title'));
-        $('#content').val($(this).data('content'));
-    });
-
-    function loadBlogsList() {
-        $.ajax({
-            type: 'GET',
-            url: '/blogs',
-            data: {search: $('#search').val()},
-            success: function(response) {
-                $('#blogListing').html(response.html);
-            }
-        });
-    }
-</script>
+@push('scripts')
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script src="{{ asset('js/blogs.js') }}"></script>
+@endpush
