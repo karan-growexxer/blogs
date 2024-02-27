@@ -55,7 +55,7 @@
                             <div class="d-flex justify-content-end align-items-center mb-4 pb-3">
                                 <input type="text" class="form-control" name="search" id="search" placeholder="Search">
                             </div>
-                            <div id="taskListing"></div>
+                            <div id="blogListing"></div>
                         </div>
                     </div>
                 </div>
@@ -71,7 +71,7 @@
 <script>
     $(document).ready(function() {
         loadBlogsList();
-        $('#search').on('change keyup', loadBlogsList);
+        $('#search').on('keyup', loadBlogsList);
 
         $('#createBlogForm').submit(function(event) {
             event.preventDefault();
@@ -96,13 +96,19 @@
         });
     });
 
+    $(document).on('click', '.edit-btn', function(){
+        $('#blog_id').val($(this).data('blog_id'));
+        $('#title').val($(this).data('title'));
+        $('#content').val($(this).data('content'));
+    });
+
     function loadBlogsList() {
         $.ajax({
             type: 'GET',
             url: '/blogs',
             data: {search: $('#search').val()},
             success: function(response) {
-                $('#taskListing').html(response.html);
+                $('#blogListing').html(response.html);
             }
         });
     }
