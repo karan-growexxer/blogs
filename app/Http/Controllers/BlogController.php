@@ -21,7 +21,8 @@ class BlogController extends Controller
         if($request->ajax()) {
             $blogsBuilder = new Blog();
             if($request->has('search')) {
-                $blogsBuilder->where('title','LIKE', "%$request->search%");
+                $blogsBuilder = $blogsBuilder->where('title','LIKE', "%$request->search%")
+                    ->orWhere('content','LIKE', "%$request->search%");
             }
             $blogsCollection = $blogsBuilder->get();
             return response()->json(['html'=> view('blogs.list', compact('blogsCollection'))->render()]);

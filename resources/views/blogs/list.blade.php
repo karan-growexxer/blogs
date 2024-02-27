@@ -9,6 +9,9 @@
                     <div class="col-md-8">
                         {{ $blog->content }}
                     </div>
+                    <div class="col-md-2 text-end">
+                        <button href="#" class="btn btn-primary btn-sm edit-btn" data-blog_id="{{ $blog->id }}" data-content="{{ $blog->content }}" data-title="{{ $blog->title }}">Edit</button>
+                    </div>
                 </div>
             </li>
         @endforeach
