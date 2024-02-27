@@ -11,6 +11,7 @@
                     </div>
                     <div class="col-md-2 text-end">
                         <button href="#" class="btn btn-primary btn-sm edit-btn" data-blog_id="{{ $blog->id }}" data-content="{{ $blog->content }}" data-title="{{ $blog->title }}">Edit</button>
+                        <button href="#" class="btn btn-danger btn-sm delete-btn" data-blog_id="{{ $blog->id }}">Delete</button>
                     </div>
                 </div>
             </li>
